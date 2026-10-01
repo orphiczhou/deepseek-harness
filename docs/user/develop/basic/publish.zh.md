@@ -183,6 +183,21 @@ dsh plugin --profile demo add github:you/hello-plugin
 - **发布到 npm**，在 `pnpm publish` 时构建好 `lib/`；`dsh plugin add your-package` 安装的就是预构建代码。
 - **交付 tarball**：用 `pnpm pack` 打包；用户执行 `dsh plugin add ./hello-plugin-0.1.0.tgz`。
 
+## 分发与发现
+
+本仓库不必收录你的组合包。发布就是让这个包可达——npm、Git 托管或 tarball——并告诉用户一条安装命令，因为 `dsh plugin add` 三种 spec 都接受。
+
+要让组合包可被找到，请给它的仓库添加 [`dsh-plugin`](https://github.com/topics/dsh-plugin) 这个 GitHub topic。该 topic 是生态的发现约定（[CONTRIBUTING.zh.md](../../../../CONTRIBUTING.zh.md) 即如此建议），社区目录会索引它，因此带该 topic 且声明了 `dsh.bundle` 的仓库无需申请即可被收录。这里没有可供发布的注册表，也没有需要通过的评审：你 README 里的那条安装命令就是全部的“上架信息”。
+
+```sh
+dsh plugin add owner/plugin-repo
+```
+
+两个特性让 Git 分发保持顺滑，上面的 `hello-plugin` 已经同时具备：
+
+- **入口文件已提交。** 没有 `prepare` 脚本需要运行，安装就不需要任何构建脚本授权，用户第一次 `add` 就会成功、不弹提示。
+- **包名唯一。** profile 的依赖解析到同一个扁平 `node_modules`，与其它已安装组合包撞名会静默遮蔽。
+
 ## 下一步
 
 - [插件与生命周期](../framework/index.zh.md) — 插件的完整生命周期

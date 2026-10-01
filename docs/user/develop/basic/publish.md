@@ -183,6 +183,21 @@ If you would rather not ask users for the allowance, distribute built artifacts 
 - **Publish to npm** with `lib/` built at `pnpm publish` time; `dsh plugin add your-package` then installs prebuilt code.
 - **Ship a tarball** from `pnpm pack`; users run `dsh plugin add ./hello-plugin-0.1.0.tgz`.
 
+## Distribution and discovery
+
+Nothing in this repository has to list your bundle. Publishing means making the package reachable — npm, a Git host, or a tarball — and telling users one install command, because `dsh plugin add` accepts all three specification kinds.
+
+To make a bundle findable, associate its repository with the [`dsh-plugin`](https://github.com/topics/dsh-plugin) GitHub topic. That topic is the ecosystem's discovery convention ([CONTRIBUTING.md](../../../../CONTRIBUTING.md) recommends it), and community catalogs index it, so a repository that carries the topic and declares `dsh.bundle` is listed without an application. There is no registry to publish into and no review to pass: the install command in your README is the whole listing.
+
+```sh
+dsh plugin add owner/plugin-repo
+```
+
+Two properties keep a Git distribution frictionless, and the `hello-plugin` above already has both:
+
+- **The entry points are committed.** With no `prepare` script to run, the install needs no build-script allowance, so the user's first `add` succeeds without a prompt.
+- **The package name is unique.** A profile's dependencies resolve into one flat `node_modules`, so a name that collides with another installed bundle silently shadows it.
+
 ## Next steps
 
 - [Plugins and lifecycle](../framework/index.md) — the full plugin lifecycle
